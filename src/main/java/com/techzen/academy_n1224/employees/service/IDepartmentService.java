@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Optional;
 
 public interface IDepartmentService {
+
     public List<?> getAll();
 
     public Department findById(int id);

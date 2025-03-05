@@ -11,6 +11,8 @@ import lombok.experimental.FieldDefaults;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 @RestController
 @RequestMapping("/employees")
 @AllArgsConstructor
@@ -20,8 +22,8 @@ public class EmployeeController  {
     IEmployeeService employeeService;
 
     @GetMapping()
-    public ResponseEntity<?> getAllEmployees(Employee employee) {
-           return JsonResponse.ok(employeeService.getAll(employee));
+    public ResponseEntity<?> finAttribute( EmployeeSearchRequest employeeSearchRequest) {
+        return JsonResponse.ok(employeeService.findByAttributes(employeeSearchRequest));
     }
 
     @GetMapping("/{id}")

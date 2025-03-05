@@ -6,8 +6,10 @@ import com.techzen.academy_n1224.employees.repository.IEmployeeRepository;
 import com.techzen.academy_n1224.employees.service.IEmployeeService;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,10 +22,12 @@ public class EmployeeService implements IEmployeeService {
 
     IEmployeeRepository employeeRepository;
 
-    public List<?> getAll(Employee employee) {
-        return employeeRepository.getALl( employee);
+    public List<Employee> findByAttributes(EmployeeSearchRequest employeeSearchRequest) {
+        return employeeRepository.findByAttributes(employeeSearchRequest.getName(),
+                    employeeSearchRequest.getDobFrom(), employeeSearchRequest.getDobTo(),
+                    employeeSearchRequest.getGender() , employeeSearchRequest.getSalaryRange(),
+                    employeeSearchRequest.getPhone(), employeeSearchRequest.getDepartmentId());
     }
-
 
     public Employee findById(int id) {
         return employeeRepository.findById(id);
@@ -34,7 +38,7 @@ public class EmployeeService implements IEmployeeService {
     }
 
     public void delete(int id) {
-         employeeRepository.deleteById(id);
+        employeeRepository.deleteById(id);
     }
 
 
