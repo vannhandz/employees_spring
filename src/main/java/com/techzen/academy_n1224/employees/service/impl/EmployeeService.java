@@ -6,12 +6,9 @@ import com.techzen.academy_n1224.employees.repository.IEmployeeRepository;
 import com.techzen.academy_n1224.employees.service.IEmployeeService;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
-import org.springframework.data.repository.query.Param;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDate;
-import java.util.List;
-import java.util.Optional;
 
 @Getter
 @Setter
@@ -22,11 +19,11 @@ public class EmployeeService implements IEmployeeService {
 
     IEmployeeRepository employeeRepository;
 
-    public List<Employee> findByAttributes(EmployeeSearchRequest employeeSearchRequest) {
+    public   Page<Employee> findByAttributes(EmployeeSearchRequest employeeSearchRequest, Pageable pageable) {
         return employeeRepository.findByAttributes(employeeSearchRequest.getName(),
                     employeeSearchRequest.getDobFrom(), employeeSearchRequest.getDobTo(),
                     employeeSearchRequest.getGender() , employeeSearchRequest.getSalaryRange(),
-                    employeeSearchRequest.getPhone(), employeeSearchRequest.getDepartmentId());
+                    employeeSearchRequest.getPhone(), employeeSearchRequest.getDepartmentId(),pageable);
     }
 
     public Employee findById(int id) {

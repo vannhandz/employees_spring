@@ -1,14 +1,16 @@
 package com.techzen.academy_n1224.employees.controller;
 
+import com.techzen.academy_n1224.employees.dto.page.PageResponse;
 import com.techzen.academy_n1224.employees.en.ApiException;
-import com.techzen.academy_n1224.employees.en.ApiResponse;
 import com.techzen.academy_n1224.employees.en.ErrorCode;
 import com.techzen.academy_n1224.employees.en.JsonResponse;
 import com.techzen.academy_n1224.employees.model.Department;
 import com.techzen.academy_n1224.employees.service.IDepartmentService;
+
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,8 +23,8 @@ public class DepartmentController {
     IDepartmentService departmentService;
 
     @GetMapping()
-    private ResponseEntity<?> getAll() {
-        return JsonResponse.ok(departmentService.getAll());
+    private ResponseEntity<?> getAll(Pageable pageable) {
+        return JsonResponse.ok(new PageResponse<>(departmentService.getAll(pageable)));
     }
 
     @GetMapping("/{id}")

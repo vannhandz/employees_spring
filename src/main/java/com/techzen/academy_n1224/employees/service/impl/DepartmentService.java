@@ -9,6 +9,8 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,8 +25,8 @@ public class DepartmentService implements IDepartmentService {
 
     IDepartmentRepository departmentRepository;
 
-    public List<?> getAll() {
-        return departmentRepository.getAll();
+    public Page<?> getAll(Pageable pageable) {
+        return departmentRepository.findAll(pageable);
     }
 
     public Department findById(int id) {

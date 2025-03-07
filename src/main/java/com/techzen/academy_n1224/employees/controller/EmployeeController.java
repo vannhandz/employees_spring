@@ -1,5 +1,6 @@
 package com.techzen.academy_n1224.employees.controller;
 import com.techzen.academy_n1224.employees.dto.EmployeeSearchRequest;
+import com.techzen.academy_n1224.employees.dto.page.PageResponse;
 import com.techzen.academy_n1224.employees.en.ApiException;
 import com.techzen.academy_n1224.employees.en.ErrorCode;
 import com.techzen.academy_n1224.employees.en.JsonResponse;
@@ -8,6 +9,7 @@ import com.techzen.academy_n1224.employees.service.IEmployeeService;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,8 +24,8 @@ public class EmployeeController  {
     IEmployeeService employeeService;
 
     @GetMapping()
-    public ResponseEntity<?> finAttribute( EmployeeSearchRequest employeeSearchRequest) {
-        return JsonResponse.ok(employeeService.findByAttributes(employeeSearchRequest));
+    public ResponseEntity<?> finAttribute(EmployeeSearchRequest employeeSearchRequest, Pageable pageable) throws ApiException {
+        return JsonResponse.ok(new PageResponse<>(employeeService.findByAttributes(employeeSearchRequest,pageable)));
     }
 
     @GetMapping("/{id}")
