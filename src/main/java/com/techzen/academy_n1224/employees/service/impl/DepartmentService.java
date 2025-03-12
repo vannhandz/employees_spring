@@ -13,9 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Optional;
-
 @Getter
 @Setter
 @RequiredArgsConstructor
@@ -25,7 +22,7 @@ public class DepartmentService implements IDepartmentService {
 
     IDepartmentRepository departmentRepository;
 
-    public Page<?> getAll(Pageable pageable) {
+    public Page<Department> getAll(Pageable pageable) {
         return departmentRepository.findAll(pageable);
     }
 
@@ -37,8 +34,9 @@ public class DepartmentService implements IDepartmentService {
         return departmentRepository.save(department);
     }
 
-    public void delete(int id) {
+    public Department delete(int id) {
         departmentRepository.deleteById(id);
+        return null;
     }
 
 }

@@ -34,8 +34,9 @@ public class EmployeeService implements IEmployeeService {
         return employeeRepository.save(employee);
     }
 
-    public void delete(int id) {
+    public Employee delete(int id) {
         employeeRepository.deleteById(id);
+        return null;
     }
 
 

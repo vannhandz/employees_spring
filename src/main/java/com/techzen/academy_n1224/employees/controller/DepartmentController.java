@@ -1,9 +1,11 @@
 package com.techzen.academy_n1224.employees.controller;
 
+import com.techzen.academy_n1224.employees.dto.department.DepartmentRequest;
 import com.techzen.academy_n1224.employees.dto.page.PageResponse;
 import com.techzen.academy_n1224.employees.en.ApiException;
 import com.techzen.academy_n1224.employees.en.ErrorCode;
 import com.techzen.academy_n1224.employees.en.JsonResponse;
+import com.techzen.academy_n1224.employees.mapper.IDepartmentMapper;
 import com.techzen.academy_n1224.employees.model.Department;
 import com.techzen.academy_n1224.employees.service.IDepartmentService;
 
@@ -21,10 +23,12 @@ import org.springframework.web.bind.annotation.*;
 public class DepartmentController {
 
     IDepartmentService departmentService;
+    IDepartmentMapper departmentMapper;
 
     @GetMapping()
     private ResponseEntity<?> getAll(Pageable pageable) {
-        return JsonResponse.ok(new PageResponse<>(departmentService.getAll(pageable)));
+        return JsonResponse.ok(new PageResponse<>(departmentService.getAll(pageable)
+                .map(departmentMapper::mapDepartmentToDepartmentResponse)));
     }
 
     @GetMapping("/{id}")
@@ -32,22 +36,25 @@ public class DepartmentController {
         if(departmentService.findById(id)==null){
             throw new ApiException(ErrorCode.Department_NOT_EXIST);
         }
-        return JsonResponse.ok(departmentService.findById(id));
+        return JsonResponse.ok(departmentMapper.mapDepartmentToDepartmentResponse(departmentService.findById(id)));
     }
 
     @PostMapping()
-    private ResponseEntity<?> create(@RequestBody Department department) {
-        return JsonResponse.created(departmentService.save(department));
+    private ResponseEntity<?> create(@RequestBody DepartmentRequest departmentRequest) {
+        Department department = departmentMapper.departmentRequestToDepartment(departmentRequest);
+
+        return JsonResponse.created(departmentMapper.mapDepartmentToDepartmentResponse(departmentService.save(department)));
     }
 
     @PutMapping("/{id}")
-    private ResponseEntity<?> upd(@RequestBody Department department,
+    private ResponseEntity<?> upd(@RequestBody  DepartmentRequest departmentRequest,
                                   @PathVariable("id") int id) {
         if(departmentService.findById(id)==null){
             throw new ApiException(ErrorCode.Department_NOT_EXIST);
         }
+        Department department = departmentMapper.departmentRequestToDepartment(departmentRequest);
         department.setId(id);
-        return JsonResponse.ok(departmentService.save(department));
+        return JsonResponse.ok(departmentMapper.mapDepartmentToDepartmentResponse(departmentService.save(department)));
     }
 
     @DeleteMapping("/{id}")
@@ -55,7 +62,8 @@ public class DepartmentController {
         if(departmentService.findById(id)==null){
             throw new ApiException(ErrorCode.Department_NOT_EXIST);
         }
-        departmentService.delete(id);
+
+        departmentMapper.mapDepartmentToDepartmentResponse(departmentService.delete(id));
         return JsonResponse.noContent();
     }
 }
